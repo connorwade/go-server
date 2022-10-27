@@ -6,51 +6,77 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type album struct {
-	ID     string  `json:"id"`
-	Title  string  `json:"title"`
-	Artist string  `json:"artist"`
-	Price  float64 `json:"price"`
-}
-
-var albums = []album{
-	{ID: "1", Title: "Blue Train", Artist: "John Coltrane", Price: 56.99},
-	{ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
-	{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
-}
+var (
+	db database
+)
 
 func main() {
+	//setup db
+	db.Migrate()
+
 	router := gin.Default()
 	router.GET("/albums", getAlbums)
 	router.GET("/albums/:id", getAlbumByID)
 	router.POST("/albums", postAlbums)
 
 	router.Run("localhost:8080")
+	// var db database
+	// db.Migrate()
+	// fmt.Println(db.Data)
+	// newAlbum := Music{
+	// 	ID:     "4",
+	// 	Title:  "Ray",
+	// 	Artist: "L'arc-en-ciel",
+	// 	Price:  12.99,
+	// }
+	// db.Create(newAlbum)
+	// fmt.Println(db.Data)
+	// s, _ := db.All()
+	// fmt.Println(s)
+	// rMusic, _ := db.GetByID("4")
+	// fmt.Println(*rMusic)
+	// upMusic, _ := db.Update("4", Music{
+	// 	ID:     "4",
+	// 	Title:  "Ark",
+	// 	Artist: "L'arc-en-ciel",
+	// 	Price:  13.99,
+	// })
+	// fmt.Println(*upMusic)
+	// s, _ = db.All()
+	// fmt.Println(s)
+	// db.Delete("4")
+	// s, _ = db.All()
+	// fmt.Println(s)
 }
 
 func getAlbums(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, albums)
+	c.Bind(&db.Data)
+	c.JSON(http.StatusOK, gin.H{
+		"data": db.Data.Albums,
+	})
 }
 
 func postAlbums(c *gin.Context) {
-	var newAlbum album
+	var newAlbum Music
 
 	if err := c.BindJSON(&newAlbum); err != nil {
 		return
 	}
 
-	albums = append(albums, newAlbum)
+	err := db.Create(newAlbum)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Bad bad bad"})
+	}
 	c.IndentedJSON(http.StatusCreated, newAlbum)
 }
 
 func getAlbumByID(c *gin.Context) {
 	id := c.Param("id")
 
-	for _, a := range albums {
-		if a.ID == id {
-			c.IndentedJSON(http.StatusOK, a)
-			return
-		}
+	music, err := db.GetByID(id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+	c.Bind(music)
+	c.IndentedJSON(http.StatusOK, gin.H{"music": music})
 }
