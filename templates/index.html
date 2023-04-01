@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music Database</title>
+    <script src="/var/www/index.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <ul>
+        Artists {{range .Music}}
+        <li>
+          <p>Album Title: {{.Title}}</p>
+          <p>Artist: {{.Artist}}</p>
+          <p>Price: {{.Price}}</p>
+        </li>
+        {{end}}
+      </ul>
+    </main>
+    <form method="post">
+      <fieldset>
+        <legend>Add an Album</legend>
+        <div class="form-set">
+          <label for="form-title">Album Title</label>
+          <input type="text" name="form-title" id="form-title" />
+        </div>
+        <div class="form-set">
+          <label for="form-artist">Album Artist</label>
+          <input type="text" name="form-artist" id="form-artist" />
+        </div>
+        <div class="form-set">
+          <label for="form-price">Album Price</label>
+          <input type="number" name="form-price" id="form-price" />
+        </div>
+        <input type="submit" value="Submit" />
+      </fieldset>
+    </form>
+  </body>
+</html>
