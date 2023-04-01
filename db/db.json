@@ -1,0 +1,26 @@
+[
+ {
+  "id": "905a368a-0313-487a-8b80-1f40ebc56837",
+  "title": "Blue Train",
+  "artist": "John Coltrane",
+  "price": 56.99
+ },
+ {
+  "id": "f5a5808d-1290-44a8-9843-1b430c93d551",
+  "title": "Jeru",
+  "artist": "Gerry Mulligan",
+  "price": 17.99
+ },
+ {
+  "id": "07fb187c-45e5-4711-b1da-26d44e149f7c",
+  "title": "Sarah Vaughan and Clifford Brown",
+  "artist": "Sarah Vaughan",
+  "price": 39.99
+ },
+ {
+  "id": "65bf3ee3-f60f-4e40-b99c-73d5b3e5604a",
+  "title": "Ray",
+  "artist": "l'arc-en-ciel",
+  "price": 7.99
+ }
+]
